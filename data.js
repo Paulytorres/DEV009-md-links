@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 
 function fn_isMarkdownFile(filePath){
@@ -22,6 +23,15 @@ function fn_isMarkdownFile(filePath){
   
     return links;
   }
-  module.exports = {
-    fn_isMarkdownFile, extractLinks,
-}
+
+  function readMarkdownFile(filePath, callback) {
+    fs.readFile(filePath, 'utf-8', (readErr, fileContent) => {
+      if (readErr) {
+        callback(`Error al leer el archivo '${filePath}': ${readErr.message}`);
+      } else {
+        const links = extractLinks(fileContent, filePath);
+        callback(null, links);
+      }
+    });
+  }
+  module.exports = { fn_isMarkdownFile, extractLinks, readMarkdownFile}
