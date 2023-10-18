@@ -6,8 +6,6 @@ const mdLinks = (filePath, validate = false) => {
   return new Promise((resolve, reject) => {
     const pathAbsolute = path.resolve(filePath);
 
-    
-
     fs.access(pathAbsolute, fs.constants.F_OK, (err) => {
       if (err) {
         reject(`El archivo '${filePath}' no existe.`);
@@ -19,21 +17,20 @@ const mdLinks = (filePath, validate = false) => {
         return;
       }
 
-      readMarkdownFile(pathAbsolute, (readErr, fileContent) => {
+      readMarkdownFile(pathAbsolute, (readErr, links) => {
         if (readErr) {
           reject(readErr);
-        } else {
-          const links = extractLinks(fileContent, pathAbsolute);
+        }
 
-          if (validate) {
+        if (validate) {
             validateLinks(links)
               .then((validatedLinks) => resolve(validatedLinks))
               .catch((validateErr) => reject(validateErr));
-          } else {
-            resolve(links);
-          }
         }
-      });
+        
+        resolve( links.length === 0 ? [] : links );
+          
+        });
     });
   });
 };
