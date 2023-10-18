@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { fn_isMarkdownFile, extractLinks, readMarkdownFile, validateLinks } = require('./data.js');
+const { fn_isMarkdownFile, readMarkdownFile, validateLinks } = require('./data.js');
 
 const mdLinks = (filePath, validate = false) => {
   return new Promise((resolve, reject) => {

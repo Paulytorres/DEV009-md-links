@@ -15,13 +15,14 @@ function fileExists(filePath) {
       });
   });
 }
-
+//verifica si el archivo en la ruta proporcionada es un archivo Markdown.
 function fn_isMarkdownFile(filePath) {
   const markdownExtensions = ['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'];
   const ext = path.extname(filePath);
   return markdownExtensions.includes(ext.toLowerCase());
 }
-
+//busca en el contenido del archivo las coincidencias de enlaces Markdown 
+//y los almacena en un array de objetos
 function extractLinks(fileContent, filePath) {
   const links = [];
   const regexExp =/\[([^\]]+)]\((http[a-zA-ZÀ-ÿ0-9-@:;!%._/?&\+~#=]{1,250})\)/g;
@@ -37,7 +38,8 @@ function extractLinks(fileContent, filePath) {
 
   return links;
 }
-
+//lee el contenido de un archivo Markdown en la ruta proporcionada 
+//y llama a un callback con cualquier error que pueda ocurrir durante la lectura de enlaces extraídos.
 function readMarkdownFile(filePath, callback) {
   fs.readFile(filePath, 'utf-8', (readErr, fileContent) => {
     if (readErr) {
@@ -49,6 +51,7 @@ function readMarkdownFile(filePath, callback) {
   });
 }
 
+// toma una lista de enlaces y realiza una solicitud HTTP HEAD a cada uno para validar si están activos
 function validateLinks(links) {
   const linkPromises = links.map((link) => {
     return axios
